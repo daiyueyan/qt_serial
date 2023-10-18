@@ -18,10 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    upacke_handle.cpp \
+    upacker.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    upacke_handle.h \
+    upacker.h
 
 FORMS += \
     mainwindow.ui

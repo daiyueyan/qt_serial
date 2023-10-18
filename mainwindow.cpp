@@ -26,11 +26,29 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&mSerialPort, SIGNAL(readyRead()), this, SLOT(getrev()));
 
     connect(mtimer, SIGNAL(timeout()), this, SLOT(timerupdata()));
+
+    upacker = new Upacker();
+    upacke_handle = new Upacke_handle(upacker);
+    connect(upacke_handle, SIGNAL(upacke_handle_signal(uint8_t * buf, uint16_t len)),
+            this, SLOT(pc_send_serial(uint8_t *buf, uint16_t len)));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::pc_send_serial(uint8_t *buf, uint16_t len)
+{
+    QByteArray send_to_pc;
+    send_to_pc.append("0x5A");
+    send_to_pc.append("0xA5");
+    for (int i=0; i<len ;i++)
+    {
+        send_to_pc.append(buf[i]);
+    }
+
+    mSerialPort.write(send_to_pc);
 }
 
 void MainWindow::getrev()
@@ -85,7 +103,6 @@ void MainWindow::on_btn_open_clicked()
         ui->cboxdata->setEnabled(true);
         ui->cboxparity->setEnabled(true);
         mSerialPort.close();
-        qDebug()<<"关闭串口"<<serialportname;
 
     }
     else//当前处于关闭的状态
@@ -99,7 +116,6 @@ void MainWindow::on_btn_open_clicked()
             ui->cboxstop->setEnabled(false);
             ui->cboxdata->setEnabled(false);
             ui->cboxparity->setEnabled(false);
-            qDebug()<<"成功打开串口"<<serialportname;
         }
     }
 }

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSerialPort>
 #include <QTimer>
+#include "upacke_handle.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,6 +17,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    Upacke_handle *upacke_handle;
+    Upacker *upacker;
 
 private slots:
     void on_btn_rev_clean_clicked();
@@ -32,6 +36,8 @@ private slots:
     void getrev();
 
     void timerupdata();
+
+    void pc_send_serial(uint8_t *buf, uint16_t len);
 
 private:
     Ui::MainWindow *ui;
